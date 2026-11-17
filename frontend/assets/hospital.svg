@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="360" viewBox="0 0 540 360" fill="none">
+  <defs>
+    <linearGradient id="halo" x1="280" y1="30" x2="280" y2="340" gradientUnits="userSpaceOnUse"><stop stop-color="#dcece1"/><stop offset="1" stop-color="#eaf3ed"/></linearGradient>
+    <linearGradient id="front" x1="185" y1="110" x2="355" y2="300" gradientUnits="userSpaceOnUse"><stop stop-color="#fff"/><stop offset="1" stop-color="#e7f0e9"/></linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a6d0be"/><stop offset="1" stop-color="#74af96"/></linearGradient>
+    <pattern id="windows" x="0" y="0" width="37" height="39" patternUnits="userSpaceOnUse"><rect x="8" y="8" width="19" height="22" rx="2" fill="#bad7ca"/><path d="M17.5 8v22" stroke="#eaf4ee" stroke-width="2"/></pattern>
+    <filter id="shadow" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#446e54" flood-opacity=".1"/></filter>
+  </defs>
+  <circle cx="283" cy="174" r="148" fill="url(#halo)"/>
+  <circle cx="283" cy="174" r="172" stroke="#dce9df" stroke-dasharray="3 9"/>
+  <path d="M78 289c38-17 119-33 204-32 101 0 169 15 190 31-24 23-111 39-197 37-89-1-164-14-197-36Z" fill="#d6e6db"/>
+  <path d="m118 289 169-44 137 45-166 43-140-44Z" fill="#e8efe9"/>
+  <path d="m258 333 1-24 165-43v24l-166 43Z" fill="#cbded0"/>
+  <path d="m118 289 140 44 1-24-141-44v24Z" fill="#d7e5db"/>
+  <!-- A compact, isometric hospital campus -->
+  <g filter="url(#shadow)">
+    <path d="m139 169 79-23 61 21-80 23-60-21Z" fill="#fafdfb"/>
+    <path d="m139 169 60 21v96l-60-22v-95Z" fill="#dcebe2"/>
+    <path d="m199 190 80-23v97l-80 22v-96Z" fill="#f5faf6"/>
+    <path d="m143 166 75-22 65 21-84 25-56-24Z" fill="#bfd8ca"/>
+    <path d="m153 195 29 10v15l-29-10v-15Zm0 29 29 10v15l-29-10v-15Z" fill="#92bca7"/>
+    <path d="m211 204 51-15v18l-51 15v-18Zm0 30 51-15v18l-51 15v-18Z" fill="#b5d4c3"/>
+    <path d="m298 160 66-19 62 20-65 19-63-20Z" fill="#fafdfb"/>
+    <path d="m298 160 63 20v106l-63-21V160Z" fill="#dbe9df"/>
+    <path d="m361 180 65-19v105l-65 20V180Z" fill="#f1f8f3"/>
+    <path d="m296 155 68-20 67 22-70 20-65-22Z" fill="#afcdbb"/>
+    <path d="m375 196 36-10v18l-36 10v-18Zm0 33 36-11v18l-36 11v-18Z" fill="#a8cbb8"/>
+    <path d="m214 90 77-23 68 23-78 24-67-24Z" fill="#fff"/>
+    <path d="m214 90 67 24v181l-67-24V90Z" fill="#deece3"/>
+    <path d="m281 114 78-24v182l-78 23V114Z" fill="url(#front)"/>
+    <path d="m209 83 82-24 73 25-83 25-72-26Z" fill="#bed8c9"/>
+    <path d="m209 83 72 26v8l-72-26v-8Z" fill="#9dbdaa"/>
+    <path d="m281 109 83-25v8l-83 25v-8Z" fill="#a8c9b4"/>
+    <path d="m224 138 44 15v88l-44-15v-88Z" fill="#9fc6b1"/>
+    <path d="m225 166 43 15m-43 14 43 15m-22-64v86" stroke="#dfede3" stroke-width="4"/>
+    <path d="m293 144 52-16v86l-52 16v-86Z" fill="#b5d5c2"/>
+    <path d="m293 172 52-16m-52 45 52-16m-26-49v86" stroke="#f1f7f3" stroke-width="4"/>
+    <path d="m301 250 28-8v39l-28 8v-39Z" fill="#659d80"/>
+    <path d="m315 246v39" stroke="#e0eee4" stroke-width="2"/>
+    <path d="m288 239 49-14 15 6-48 15-16-7Z" fill="#3e8565"/>
+    <path d="m288 239 16 7v7l-16-7v-7Z" fill="#276c4f"/>
+    <path d="m304 246 48-15v7l-48 15v-7Z" fill="#4c9370"/>
+    <path d="m238 106 10 4v11l10 4v10l-10-3v12l-10-4v-11l-10-4v-10l10 3v-12Z" fill="#37815e"/>
+  </g>
+  <!-- Planting and pedestrian paths -->
+  <path d="m303 291 22 7-56 15-23-6 57-16Z" fill="#fdfefc"/>
+  <path d="m316 301 47 15m-69-9 45 14" stroke="#c0d5c4" stroke-width="2"/>
+  <g><path d="M124 261v27" stroke="#7a9d78" stroke-width="4"/><ellipse cx="124" cy="249" rx="18" ry="26" fill="#a5c5a3"/><ellipse cx="117" cy="245" rx="11" ry="19" fill="#b6d2b1"/></g>
+  <g><path d="M402 268v24" stroke="#7a9d78" stroke-width="4"/><ellipse cx="402" cy="252" rx="20" ry="29" fill="#82ae8d"/><ellipse cx="394" cy="248" rx="12" ry="21" fill="#a0c2a0"/></g>
+  <g><path d="M439 251v21" stroke="#7a9d78" stroke-width="3"/><ellipse cx="439" cy="236" rx="14" ry="21" fill="#b4ccac"/></g>
+  <ellipse cx="163" cy="295" rx="23" ry="7" fill="#bad2b6"/><ellipse cx="172" cy="290" rx="12" ry="10" fill="#a4c39d"/><ellipse cx="155" cy="292" rx="11" ry="8" fill="#b8cfaa"/>
+  <!-- Clinical details, integrated into the illustration -->
+  <g transform="translate(115 85)" filter="url(#shadow)"><rect width="51" height="51" rx="14" fill="#fff"/><path d="M25.5 13v25M13 25.5h25" stroke="#408d6b" stroke-width="5" stroke-linecap="round"/></g>
+  <g transform="translate(381 88)" filter="url(#shadow)"><rect width="94" height="52" rx="12" fill="#fff"/><path d="M13 28h13l6-12 9 23 8-17 6 6h25" stroke="#7caf90" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <circle cx="186" cy="66" r="4" fill="#b8d2bb"/><circle cx="445" cy="194" r="3" fill="#a8c6ae"/><path d="M100 196h10m-5-5v10m253-149h8m-4-4v8" stroke="#a9c6b2" stroke-width="2" stroke-linecap="round"/>
+</svg>

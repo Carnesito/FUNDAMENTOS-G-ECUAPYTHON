@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pacientes · Sistema de Gestión Hospitalaria</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Sistema de Gestión Hospitalaria, inicio">
+    <span class="brand-mark"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
+    <span><strong>Gestión<br>Hospitalaria</strong><small>Personas. Atención. Bienestar.</small></span>
+  </a>
+  <p class="nav-label">ESPACIO DE TRABAJO</p>
+  <nav class="nav" aria-label="Navegación principal">
+    <a href="index.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Inicio</span></a>
+    <a href="pacientes.html" aria-current="page"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M2 21v-3a7 7 0 0 1 14 0v3M16 4a3 3 0 0 1 0 6m3 11v-3a7 7 0 0 0-2-5"/></svg><span>Pacientes</span></a>
+    <a href="consulta.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5M8 10.5h5m-2.5-2.5v5"/></svg><span>Consulta</span></a>
+    <a href="centros.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 21v-5h6v5M9 9h6m-3-3v6M7 2h10"/></svg><span>Centros médicos</span></a>
+    <a href="areas.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 3v7M14 6.5h7M3 17.5h7m-3.5-3.5v7"/></svg><span>Áreas hospitalarias</span></a>
+  </nav>
+  <div class="sidebar-note">
+    <svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/><path d="M5 12h4l2-4 3 8 2-4h3"/></svg>
+    <strong>El cuidado empieza aquí.</strong>
+    <p>La información organizada es el primer paso para una mejor atención.</p>
+  </div>
+  <div class="sidebar-foot"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Sistema de Gestión Hospitalaria</span></div>
+</header>
+<div class="workspace-bar">
+  <div class="workspace-path"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 21v-5h6v5M9 9h6m-3-3v6M7 2h10"/></svg><span>Gestión hospitalaria</span><span>/</span><strong>Pacientes</strong></div>
+  <div class="workspace-identity"><span>Atención y administración</span><span class="identity-mark" aria-label="Sistema de Gestión Hospitalaria">SGH</span></div>
+</div>
+
+<main id="contenido">
+
+  <div class="crumbs"><a href="index.html">Inicio</a> / Pacientes</div>
+
+  <div class="page-head">
+    <span class="eyebrow">ATENCIÓN AL PACIENTE</span>
+    <h1>Registrar pacientes</h1>
+    <p>La cédula identifica al paciente y no puede repetirse. Completa los campos marcados con asterisco.</p>
+  </div>
+
+  <div id="aviso" class="alerta" role="status" aria-live="polite"></div>
+
+  <section class="card">
+    <h2><span class="heading-title"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 21v-2a6.5 6.5 0 0 1 13 0v2M19 8v6m-3-3h6"/></svg>Nuevo paciente</span></h2>
+    <p class="form-caption">Completa los datos personales y, si corresponde, la asignación de triaje y cama.</p>
+
+    <form id="formPaciente" novalidate>
+      <div class="form-grid">
+
+        <div class="campo">
+          <label for="cedula">Cédula <span class="req">*</span></label>
+          <input id="cedula" name="cedula" type="text" inputmode="numeric" maxlength="10"
+                 placeholder="0951234567" autocomplete="off">
+          <span class="error" id="cedulaError"></span>
+        </div>
+
+        <div class="campo">
+          <label for="nombres">Nombres y apellidos <span class="req">*</span></label>
+          <input id="nombres" name="nombres" type="text" placeholder="María Fernanda Vera López"
+                 autocomplete="off">
+          <span class="error" id="nombresError"></span>
+        </div>
+
+        <div class="campo">
+          <label for="nacimiento">Fecha de nacimiento <span class="req">*</span></label>
+          <input id="nacimiento" name="nacimiento" type="date">
+          <span class="error" id="nacimientoError"></span>
+        </div>
+
+        <div class="campo">
+          <label for="telefono">Teléfono <span class="req">*</span></label>
+          <input id="telefono" name="telefono" type="text" inputmode="numeric" maxlength="10"
+                 placeholder="0991234567" autocomplete="off">
+          <span class="error" id="telefonoError"></span>
+        </div>
+
+        <div class="campo">
+          <label for="triaje">Triaje <span class="hint">(opcional)</span></label>
+          <select id="triaje" name="triaje">
+            <option value="">Sin asignar</option>
+            <option>Nivel I</option>
+            <option>Nivel II</option>
+            <option>Nivel III</option>
+            <option>Nivel IV</option>
+          </select>
+          <span class="error" id="triajeError"></span>
+        </div>
+
+        <div class="campo">
+          <label for="cama">Cama <span class="hint">(opcional)</span></label>
+          <input id="cama" name="cama" type="text" placeholder="UCI-02" autocomplete="off">
+          <span class="error" id="camaError"></span>
+        </div>
+
+      </div>
+
+      <div class="acciones">
+        <button type="submit" class="btn"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z"/><path d="M7 3v6h10V3M7 21v-8h10v8"/></svg>Guardar paciente</button>
+        <button type="reset" class="btn secundario" id="btnLimpiar"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg>Limpiar</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2><span class="heading-title"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="15" height="17" rx="2"/><path d="M9 2v4m4-4v4M9 11h7m-7 5h7"/></svg>Pacientes registrados</span><span class="hint" id="contadorPacientes">0 pacientes</span></h2>
+
+    <div class="buscador">
+      <div class="campo">
+        <label for="filtro">Buscar en la lista</label>
+        <input id="filtro" type="search" placeholder="Cédula, nombres o teléfono" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="tabla-wrap">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Cédula</th>
+            <th>Nombres y apellidos</th>
+            <th>Edad</th>
+            <th>Teléfono</th>
+            <th>Triaje</th>
+            <th>Cama</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tablaPacientes"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <span>Sistema de Gestión Hospitalaria · <span id="anio">2026</span></span>
+  <span class="footer-note"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg> Datos guardados en SQLite</span>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/crud.js"></script>
+<script src="js/pacientes.js"></script>
+</body>
+</html>

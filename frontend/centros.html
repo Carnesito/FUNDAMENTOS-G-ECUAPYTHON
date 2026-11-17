@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Centros médicos · Sistema de Gestión Hospitalaria</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Sistema de Gestión Hospitalaria, inicio">
+    <span class="brand-mark"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
+    <span><strong>Gestión<br>Hospitalaria</strong><small>Personas. Atención. Bienestar.</small></span>
+  </a>
+  <p class="nav-label">ESPACIO DE TRABAJO</p>
+  <nav class="nav" aria-label="Navegación principal">
+    <a href="index.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Inicio</span></a>
+    <a href="pacientes.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M2 21v-3a7 7 0 0 1 14 0v3M16 4a3 3 0 0 1 0 6m3 11v-3a7 7 0 0 0-2-5"/></svg><span>Pacientes</span></a>
+    <a href="consulta.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5M8 10.5h5m-2.5-2.5v5"/></svg><span>Consulta</span></a>
+    <a href="centros.html" aria-current="page"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 21v-5h6v5M9 9h6m-3-3v6M7 2h10"/></svg><span>Centros médicos</span></a>
+    <a href="areas.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 3v7M14 6.5h7M3 17.5h7m-3.5-3.5v7"/></svg><span>Áreas hospitalarias</span></a>
+  </nav>
+  <div class="sidebar-note">
+    <svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/><path d="M5 12h4l2-4 3 8 2-4h3"/></svg>
+    <strong>El cuidado empieza aquí.</strong>
+    <p>La información organizada es el primer paso para una mejor atención.</p>
+  </div>
+  <div class="sidebar-foot"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Sistema de Gestión Hospitalaria</span></div>
+</header>
+<div class="workspace-bar">
+  <div class="workspace-path"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 21v-5h6v5M9 9h6m-3-3v6M7 2h10"/></svg><span>Gestión hospitalaria</span><span>/</span><strong>Centros médicos</strong></div>
+  <div class="workspace-identity"><span>Atención y administración</span><span class="identity-mark" aria-label="Sistema de Gestión Hospitalaria">SGH</span></div>
+</div>
+
+<main id="contenido">
+
+  <div class="crumbs"><a href="index.html">Inicio</a> / Centros</div>
+
+  <div class="page-head">
+    <span class="eyebrow">RED DE ATENCIÓN</span>
+    <h1>Centros médicos</h1>
+    <p>Cada centro se registra con nombre único, dirección y teléfono.</p>
+  </div>
+
+  <div id="aviso" class="alerta" role="status" aria-live="polite"></div>
+
+  <section class="card">
+    <h2><span class="heading-title"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 21v-5h6v5M9 9h6m-3-3v6M7 2h10"/></svg>Nuevo centro médico</span></h2>
+    <p class="form-caption">Añade la información de contacto y ubicación del centro.</p>
+
+    <form id="formCentro" novalidate>
+      <div class="form-grid">
+
+        <div class="campo">
+          <label for="nombre">Nombre del centro <span class="req">*</span></label>
+          <input id="nombre" type="text" placeholder="Hospital Santa Vida" autocomplete="off">
+          <span class="error" id="nombreError"></span>
+        </div>
+
+        <div class="campo">
+          <label for="direccion">Dirección <span class="req">*</span></label>
+          <input id="direccion" type="text" placeholder="Av. Amazonas 123" autocomplete="off">
+          <span class="error" id="direccionError"></span>
+        </div>
+
+        <div class="campo">
+          <label for="telefono">Teléfono <span class="req">*</span></label>
+          <input id="telefono" type="text" inputmode="numeric" maxlength="10"
+                 placeholder="022345678" autocomplete="off">
+          <span class="error" id="telefonoError"></span>
+        </div>
+
+      </div>
+
+      <div class="acciones">
+        <button type="submit" class="btn"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z"/><path d="M7 3v6h10V3M7 21v-8h10v8"/></svg>Guardar centro</button>
+        <button type="reset" class="btn secundario"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg>Limpiar</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2><span class="heading-title"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="15" height="17" rx="2"/><path d="M9 2v4m4-4v4M9 11h7m-7 5h7"/></svg>Centros registrados</span><span class="hint" id="contadorCentros">0 centros</span></h2>
+    <div class="tabla-wrap">
+      <table class="tabla">
+        <thead>
+          <tr><th>Centro médico</th><th>Dirección</th><th>Teléfono</th><th>Áreas</th><th></th></tr>
+        </thead>
+        <tbody id="tablaCentros"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <span>Sistema de Gestión Hospitalaria · <span id="anio">2026</span></span>
+  <span class="footer-note"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg> Datos guardados en SQLite</span>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/crud.js"></script>
+<script src="js/centros.js"></script>
+</body>
+</html>

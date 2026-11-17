@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+data/*.db*
+Hospital_Portable.zip
+Hospital_Codigo_Fuente.zip
+
+# archivos locales y datos de ejecucion
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite3
+.pytest_cache/
+tests/*.jpg
+
