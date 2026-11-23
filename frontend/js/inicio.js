@@ -4,4 +4,5 @@ Hospital.ui.iniciar(async function () {
   document.getElementById("statPacientes").textContent = resumen.pacientes;
   document.getElementById("statCentros").textContent = resumen.centros;
   document.getElementById("statAreas").textContent = resumen.areas;
+  document.getElementById("statCamas").textContent = resumen.camasDisponibles;
 });

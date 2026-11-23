@@ -1398,6 +1398,184 @@ footer.pie {
   }
   
 }
+/* ---------- Sprint 2: triaje, habitaciones y camas ---------- */
+.campo-completo {
+  grid-column:1/-1
+}
+.cama-nota {
+  margin:0;
+  padding:11px 13px;
+  border:1px dashed #d8e5dc;
+  border-radius:7px;
+  background:#f8fbf9;
+  color:#6f8578;
+  font-size:11px;
+  line-height:1.75
+}
+.cama-nota a {
+  font-weight:600;
+  text-decoration:none
+}
+.cama-nota a:hover {
+  text-decoration:underline
+}
+.stats {
+  grid-template-columns:repeat(auto-fit,minmax(195px,1fr))
+}
+.stat:nth-child(4) .stat-icon {
+  background:#f2edf8;
+  color:#8a78a9
+}
+.modulo.m5 {
+  --accent:#7b5aa0;
+  --tint:#f3eefa
+}
+.modulo.m6 {
+  --accent:#3f7f96;
+  --tint:#eaf3f7
+}
+.motivo-celda {
+  max-width:220px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap
+}
+.tabla-camas {
+  min-width:720px
+}
+.dispo-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(265px,1fr));
+  gap:14px
+}
+.dispo-card {
+  border:1px solid #e3ebe7;
+  border-radius:11px;
+  padding:17px 18px;
+  background:#fbfdfb
+}
+.dispo-card header {
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+  padding-bottom:11px;
+  border-bottom:1px solid #e9f0eb
+}
+.dispo-card h3 {
+  margin:0;
+  font-size:12.5px;
+  font-weight:650;
+  color:#315e46;
+  letter-spacing:-.2px
+}
+.dispo-card header span {
+  font-size:10px;
+  color:#829588;
+  white-space:nowrap
+}
+.dispo-area {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:13px
+}
+.dispo-area:last-child {
+  margin-bottom:0
+}
+.dispo-line {
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:10px;
+  font-size:11px;
+  color:#6d8174
+}
+.dispo-line strong {
+  font-weight:600;
+  color:#496454
+}
+.barra {
+  height:6px;
+  border-radius:99px;
+  background:#e9f0eb;
+  overflow:hidden
+}
+.barra i {
+  display:block;
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,#2f9e7f,#7bc3a5);
+  transition:width .3s
+}
+.dispo-cifras {
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-bottom:18px
+}
+.dispo-cifra {
+  display:inline-flex;
+  align-items:baseline;
+  gap:7px;
+  padding:7px 12px;
+  border:1px solid #e3ebe7;
+  border-radius:8px;
+  background:#fff;
+  color:#6d8174;
+  font-size:10.5px
+}
+.dispo-cifra b {
+  color:#2c5c46;
+  font-size:15px;
+  font-weight:650;
+  font-variant-numeric:tabular-nums
+}
+.dispo-vacio {
+  margin:0;
+  font-size:11px;
+  color:#8a9b8e
+}
+.filtros-camas {
+  margin-bottom:20px
+}
+.filtros-camas .campo {
+  flex:1 1 175px
+}
+.tag.cama-disponible {
+  color:#3f7f58;
+  background:#eaf4ed
+}
+.tag.cama-ocupada {
+  color:#b05460;
+  background:#faecee
+}
+.tag.cama-mantenimiento {
+  color:#9a7a3c;
+  background:#faf3e5
+}
+#tablaCamas td:nth-child(6) {
+  min-width:160px
+}
+.ficha-ancho {
+  grid-column:1/-1
+}
+@media(max-width:540px) {
+  .nav {
+    grid-template-columns:repeat(3,minmax(0,1fr))
+  }
+  .stats {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+  .filtros-camas .campo {
+    flex-basis:100%
+  }
+  .ficha-ancho {
+    grid-column:auto
+  }
+  
+}
 @media print {
   .topbar,.workspace-bar,.acciones,.buscador,footer.pie,.skip-link,.hero-actions,table .btn {
     display:none

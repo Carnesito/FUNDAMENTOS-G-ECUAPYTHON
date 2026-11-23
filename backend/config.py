@@ -7,11 +7,29 @@ FRONTEND = RAIZ / "frontend"
 CARPETA_PROGRAMA = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else RAIZ
 BASE_DATOS = CARPETA_PROGRAMA / "data" / "hospital.db"
 
-PAGINAS = {"index.html", "pacientes.html", "consulta.html", "centros.html", "areas.html"}
+PAGINAS = {"index.html", "pacientes.html", "consulta.html", "centros.html", "areas.html", "camas.html"}
+
+# Campos que se leen y se devuelven al navegador.
 CAMPOS = {
-    "pacientes": ("id", "cedula", "nombres", "nacimiento", "telefono", "triaje", "cama"),
+    "pacientes": ("id", "cedula", "nombres", "nacimiento", "telefono", "triaje",
+                  "motivo", "signos", "triaje_fecha", "cama"),
     "centros": ("id", "nombre", "direccion", "telefono"),
     "areas": ("id", "centroId", "nombre", "tipo"),
+    "habitaciones": ("id", "areaId", "numero", "piso", "tipo"),
+    "camas": ("id", "habitacionId", "codigo", "estado", "pacienteId", "observacion"),
 }
+
+# Campos que el cliente puede escribir. `cama` se calcula al asignar una cama.
+EDITABLES = {
+    "pacientes": ("cedula", "nombres", "nacimiento", "telefono", "triaje",
+                  "motivo", "signos", "triaje_fecha"),
+    "centros": ("nombre", "direccion", "telefono"),
+    "areas": ("centroId", "nombre", "tipo"),
+    "habitaciones": ("areaId", "numero", "piso", "tipo"),
+    "camas": ("habitacionId", "codigo", "estado", "pacienteId", "observacion"),
+}
+
 TIPOS_AREA = {"Emergencia", "Consulta externa", "Hospitalización", "Quirófano", "Laboratorio", "Imágenes"}
+TIPOS_HABITACION = {"Individual", "Doble", "UCI", "Aislamiento", "Observación"}
+ESTADOS_CAMA = {"Disponible", "Ocupada", "Mantenimiento"}
 TRIAJES = {"", "Nivel I", "Nivel II", "Nivel III", "Nivel IV"}

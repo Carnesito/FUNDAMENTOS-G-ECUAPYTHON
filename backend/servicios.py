@@ -28,20 +28,55 @@ def obtener(coleccion, identificador):
     return registro
 
 
+def sincronizar_cama(db, paciente_id):
+    """Mantiene `pacientes.cama` con el código de la cama realmente asignada."""
+    db.execute("""
+        UPDATE pacientes SET cama = COALESCE(
+            (SELECT codigo FROM camas WHERE pacienteId = ? ORDER BY codigo LIMIT 1), '')
+        WHERE id = ?
+    """, (paciente_id, paciente_id))
+
+
+def _pacientes_afectados(db, coleccion, identificador):
+    if coleccion == "camas":
+        filas = db.execute("SELECT pacienteId FROM camas WHERE id = ?", (identificador,))
+    elif coleccion == "habitaciones":
+        filas = db.execute("SELECT pacienteId FROM camas WHERE habitacionId = ?", (identificador,))
+    elif coleccion == "areas":
+        filas = db.execute("""
+            SELECT ca.pacienteId FROM camas ca
+            JOIN habitaciones h ON h.id = ca.habitacionId WHERE h.areaId = ?
+        """, (identificador,))
+    elif coleccion == "centros":
+        filas = db.execute("""
+            SELECT ca.pacienteId FROM camas ca
+            JOIN habitaciones h ON h.id = ca.habitacionId
+            JOIN areas a ON a.id = h.areaId WHERE a.centroId = ?
+        """, (identificador,))
+    else:
+        return []
+    return [fila[0] for fila in filas if fila[0]]
+
+
 def guardar(coleccion, entrada, identificador=None):
     comprobar_coleccion(coleccion)
     db = get_db()
     with db:
         db.execute("BEGIN IMMEDIATE")
+        anterior = None
         if identificador is not None:
-            obtener(coleccion, identificador)
-        registro = validar(coleccion, entrada, db)
+            anterior = obtener(coleccion, identificador)
+        registro = validar(coleccion, entrada, db, identificador)
         if identificador is None:
             identificador = coleccion[0] + uuid4().hex
             registro["id"] = identificador
             repositorios.insertar(db, coleccion, registro)
         else:
             repositorios.actualizar(db, coleccion, identificador, registro)
+        if coleccion == "camas":
+            for paciente in {registro.get("pacienteId", ""), (anterior or {}).get("pacienteId", "")}:
+                if paciente:
+                    sincronizar_cama(db, paciente)
         resultado = repositorios.obtener(db, coleccion, identificador)
     return resultado
 
@@ -52,7 +87,16 @@ def eliminar(coleccion, identificador):
     with db:
         db.execute("BEGIN IMMEDIATE")
         obtener(coleccion, identificador)
+        afectados = _pacientes_afectados(db, coleccion, identificador)
+        if coleccion == "pacientes":
+            db.execute("""
+                UPDATE camas SET pacienteId = '',
+                    estado = CASE WHEN estado = 'Ocupada' THEN 'Disponible' ELSE estado END
+                WHERE pacienteId = ?
+            """, (identificador,))
         repositorios.eliminar(db, coleccion, identificador)
+        for paciente in afectados:
+            sincronizar_cama(db, paciente)
 
 
 def resumen():
@@ -60,6 +104,13 @@ def resumen():
     with db:
         db.execute("BEGIN")
         return repositorios.resumen(db)
+
+
+def disponibilidad(filtros=None):
+    db = get_db()
+    with db:
+        db.execute("BEGIN")
+        return repositorios.disponibilidad(db, filtros)
 
 
 def todos_los_datos():

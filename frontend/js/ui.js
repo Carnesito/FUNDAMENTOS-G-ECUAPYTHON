@@ -116,6 +116,14 @@ window.Hospital = window.Hospital || {};
       return p[2] + "/" + p[1] + "/" + p[0];
     },
 
+    /** "2026-11-20 08:15" o "2026-11-20T08:15" -> "20/11/2026 08:15" */
+    fechaHora: function (iso) {
+      if (!iso) return "—";
+      var partes = String(iso).replace("T", " ").split(" ");
+      var fecha = ui.fecha(partes[0]);
+      return partes[1] ? fecha + " " + partes[1].slice(0, 5) : fecha;
+    },
+
     /** Edad en años a partir de la fecha de nacimiento */
     edad: function (iso) {
       if (!iso) return "—";

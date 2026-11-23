@@ -81,7 +81,12 @@
         } else {
           ui.ejecutar(formulario, async function () {
             var registro = await api.obtener(config.coleccion, id);
-            config.campos.forEach(function (campo) { document.getElementById(campo).value = registro[campo]; });
+            config.campos.forEach(function (campo) {
+              var control = document.getElementById(campo);
+              control.value = control.type === "datetime-local"
+                ? String(registro[campo] || "").replace(" ", "T")
+                : registro[campo];
+            });
             editando = id;
             guardar.textContent = "Actualizar " + config.singular;
             limpiar.textContent = "Cancelar edición";

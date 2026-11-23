@@ -9,7 +9,11 @@
       '<div><dt>Edad</dt><dd>' + ui.edad(p.nacimiento) + '</dd></div>' +
       '<div><dt>Teléfono</dt><dd>' + ui.escapar(p.telefono) + '</dd></div>' +
       '<div><dt>Triaje</dt><dd>' + ui.escapar(p.triaje || "Sin asignar") + '</dd></div>' +
-      '<div><dt>Cama</dt><dd>' + ui.escapar(p.cama || "Sin asignar") + '</dd></div></dl></article>';
+      '<div><dt>Registrado</dt><dd>' + ui.fechaHora(p.triaje_fecha) + '</dd></div>' +
+      '<div><dt>Cama</dt><dd>' + ui.escapar(p.cama || "Sin asignar") + '</dd></div>' +
+      '<div class="ficha-ancho"><dt>Motivo de consulta</dt><dd>' + ui.escapar(p.motivo || "Sin registrar") + '</dd></div>' +
+      '<div class="ficha-ancho"><dt>Signos vitales</dt><dd>' + ui.escapar(p.signos || "Sin registrar") + '</dd></div>' +
+      '</dl></article>';
   }
   H.ui.iniciar(async function () {
     var formulario = document.getElementById("formConsulta");

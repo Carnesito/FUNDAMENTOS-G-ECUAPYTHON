@@ -20,13 +20,16 @@ class HospitalTest(unittest.TestCase):
 
     def paciente(self, **cambios):
         datos = dict(cedula="1234567890", nombres="Paciente de prueba",
-                     nacimiento="1995-05-10", telefono="0991234567", triaje="Nivel II", cama="A-01")
+                     nacimiento="1995-05-10", telefono="0991234567", triaje="Nivel II",
+                     motivo="Control de signos vitales", signos="TA 120/80 · FC 80",
+                     triaje_fecha="2026-11-21 09:30")
         datos.update(cambios)
         return datos
 
     def test_paginas_recursos_y_archivos_privados(self):
         for ruta in ["/", "/index.html", "/pacientes.html", "/consulta.html",
-                     "/centros.html", "/areas.html", "/css/style.css", "/js/api.js", "/js/crud.js", "/assets/hospital.svg"]:
+                     "/centros.html", "/areas.html", "/camas.html", "/css/style.css", "/js/api.js",
+                     "/js/crud.js", "/js/camas.js", "/assets/hospital.svg"]:
             with self.subTest(ruta=ruta), self.cliente.get(ruta) as respuesta:
                 self.assertEqual(respuesta.status_code, 200)
         for ruta in ["/data/hospital.db", "/app.py", "/requirements.txt", "/css/../app.py", "/noexiste.html"]:
@@ -40,7 +43,7 @@ class HospitalTest(unittest.TestCase):
         nuevo_cliente = create_app(self.db).test_client()
         registros = nuevo_cliente.get("/api/datos").json["pacientes"]
         self.assertEqual(len(registros), 4)
-        self.assertEqual(registros[-1]["id"], identificador)
+        self.assertTrue(any(registro["id"] == identificador for registro in registros))
         with closing(sqlite3.connect(self.db)) as conexion:
             self.assertEqual(conexion.execute("SELECT cedula FROM pacientes WHERE id = ?", (identificador,)).fetchone()[0], "1234567890")
 
@@ -86,7 +89,8 @@ class HospitalTest(unittest.TestCase):
         for centro in datos["centros"]:
             self.cliente.delete("/api/centros/" + centro["id"])
         nuevo_cliente = create_app(self.db).test_client()
-        self.assertEqual(nuevo_cliente.get("/api/datos").json, {"pacientes": [], "centros": [], "areas": []})
+        self.assertEqual(nuevo_cliente.get("/api/datos").json,
+                         {"pacientes": [], "centros": [], "areas": [], "habitaciones": [], "camas": []})
 
     def test_errores_json_origen_y_host(self):
         self.assertEqual(self.cliente.post("/api/pacientes", json=[]).status_code, 400)
@@ -141,7 +145,9 @@ class HospitalTest(unittest.TestCase):
         self.assertTrue(all(a["centroNombre"] == "Hospital Santa Vida" for a in areas))
         centro = self.cliente.get("/api/centros/c1").json["registro"]
         self.assertEqual(centro["areasCount"], 2)
-        self.assertEqual(self.cliente.get("/api/resumen").json, {"pacientes": 3, "centros": 2, "areas": 3})
+        self.assertEqual(self.cliente.get("/api/resumen").json,
+                         {"pacientes": 3, "centros": 2, "areas": 4, "habitaciones": 2, "camas": 4,
+                          "camasDisponibles": 3, "camasOcupadas": 1, "camasMantenimiento": 0})
 
     def test_actualizaciones_invalidas_no_modifican_la_base(self):
         ruta = "/api/pacientes/p1"
@@ -151,6 +157,73 @@ class HospitalTest(unittest.TestCase):
         self.assertEqual(self.cliente.get(ruta).json["registro"], anterior)
         self.assertEqual(self.cliente.put(ruta, json=anterior, headers={"Origin": "https://otro.test"}).status_code, 403)
         self.assertEqual(self.cliente.put("/api/pacientes/noexiste", json=self.paciente()).status_code, 404)
+
+    def test_triaje_ordena_por_gravedad_y_valida_fecha(self):
+        urgente = self.cliente.post("/api/pacientes", json=self.paciente(
+            cedula="1111111111", nombres="AAA Urgente", triaje="Nivel I",
+            motivo="Dolor torácico", signos="TA 90/60 · FC 120",
+            triaje_fecha="2026-11-23T10:00"))
+        self.assertEqual(urgente.status_code, 201)
+        lista = self.cliente.get("/api/pacientes").json["registros"]
+        self.assertEqual(lista[0]["id"], urgente.json["registro"]["id"])
+        self.assertEqual(lista[-1]["id"], "p3")
+        self.assertEqual(self.cliente.get("/api/pacientes?triaje=Nivel I").json["total"], 1)
+        invalida = self.cliente.post("/api/pacientes", json=self.paciente(
+            cedula="2222222222", triaje_fecha="ayer por la tarde"))
+        self.assertEqual(invalida.status_code, 400)
+        self.assertEqual(invalida.json["campo"], "triaje_fecha")
+        self.assertEqual(self.cliente.post("/api/pacientes", json=self.paciente(
+            cedula="3333333333", motivo="x" * 201)).status_code, 400)
+
+    def test_habitaciones_camas_disponibilidad_y_asignacion(self):
+        habitacion = self.cliente.post("/api/habitaciones", json={
+            "areaId": "a1", "numero": "N-01", "piso": "3", "tipo": "Doble"})
+        self.assertEqual(habitacion.status_code, 201)
+        habitacion_id = habitacion.json["registro"]["id"]
+        repetida = self.cliente.post("/api/habitaciones", json={
+            "areaId": "a1", "numero": "n-01", "piso": "3", "tipo": "Doble"})
+        self.assertEqual(repetida.status_code, 409)
+        self.assertEqual(self.cliente.post("/api/habitaciones", json={
+            "areaId": "a1", "numero": "N-02", "piso": "3", "tipo": "Inventado"}).status_code, 400)
+
+        cama = self.cliente.post("/api/camas", json={
+            "habitacionId": habitacion_id, "codigo": "N-01-A", "estado": "Disponible",
+            "pacienteId": "", "observacion": ""})
+        self.assertEqual(cama.status_code, 201)
+        cama_id = cama.json["registro"]["id"]
+        self.assertEqual(cama.json["registro"]["estado"], "Disponible")
+        self.assertEqual(self.cliente.post("/api/camas", json={
+            "habitacionId": habitacion_id, "codigo": "n-01-a", "estado": "Disponible",
+            "pacienteId": "", "observacion": ""}).status_code, 409)
+
+        paciente = self.cliente.post("/api/pacientes", json=self.paciente()).json["registro"]
+        ruta = "/api/camas/" + cama_id
+        asignada = self.cliente.put(ruta, json={
+            "habitacionId": habitacion_id, "codigo": "N-01-A", "estado": "Disponible",
+            "pacienteId": paciente["id"], "observacion": ""})
+        self.assertEqual(asignada.status_code, 200)
+        self.assertEqual(asignada.json["registro"]["estado"], "Ocupada")
+        self.assertEqual(self.cliente.get("/api/pacientes/" + paciente["id"]).json["registro"]["cama"],
+                         "N-01-A")
+        self.assertEqual(self.cliente.get("/api/camas?estado=Disponible").json["total"], 3)
+        self.assertEqual(self.cliente.get("/api/disponibilidad").json["totales"]["ocupadas"], 2)
+
+        otra = self.cliente.post("/api/camas", json={
+            "habitacionId": habitacion_id, "codigo": "N-01-B", "estado": "Disponible",
+            "pacienteId": "", "observacion": ""}).json["registro"]
+        duplicada = self.cliente.put("/api/camas/" + otra["id"], json={
+            "habitacionId": habitacion_id, "codigo": "N-01-B", "estado": "Disponible",
+            "pacienteId": paciente["id"], "observacion": ""})
+        self.assertEqual(duplicada.status_code, 400)
+        self.assertEqual(duplicada.json["campo"], "pacienteId")
+
+        liberada = self.cliente.put(ruta, json={
+            "habitacionId": habitacion_id, "codigo": "N-01-A", "estado": "Ocupada",
+            "pacienteId": "", "observacion": ""})
+        self.assertEqual(liberada.json["registro"]["estado"], "Disponible")
+        self.assertEqual(self.cliente.get("/api/pacientes/" + paciente["id"]).json["registro"]["cama"], "")
+        self.assertEqual(self.cliente.delete("/api/habitaciones/" + habitacion_id).status_code, 204)
+        self.assertEqual(self.cliente.get("/api/camas/" + cama_id).status_code, 404)
 
     def test_backend_puede_funcionar_sin_frontend(self):
         cliente_api = create_app(self.db, servir_frontend=False).test_client()

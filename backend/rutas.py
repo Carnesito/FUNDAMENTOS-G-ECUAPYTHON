@@ -7,12 +7,17 @@ api = Blueprint("api", __name__, url_prefix="/api")
 
 @api.get("/salud")
 def salud():
-    return jsonify(aplicacion="hospital-sprint1", estado="ok", version=2)
+    return jsonify(aplicacion="hospital-sprint2", estado="ok", version=3)
 
 
 @api.get("/resumen")
 def resumen():
     return jsonify(servicios.resumen())
+
+
+@api.get("/disponibilidad")
+def disponibilidad():
+    return jsonify(servicios.disponibilidad(request.args.to_dict()))
 
 
 @api.get("/datos")

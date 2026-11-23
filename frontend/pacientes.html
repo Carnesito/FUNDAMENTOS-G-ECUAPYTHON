@@ -21,6 +21,7 @@
     <a href="consulta.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5M8 10.5h5m-2.5-2.5v5"/></svg><span>Consulta</span></a>
     <a href="centros.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 21v-5h6v5M9 9h6m-3-3v6M7 2h10"/></svg><span>Centros médicos</span></a>
     <a href="areas.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 3v7M14 6.5h7M3 17.5h7m-3.5-3.5v7"/></svg><span>Áreas hospitalarias</span></a>
+    <a href="camas.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8M3 17h18M7 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M15 10V8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2"/></svg><span>Camas</span></a>
   </nav>
   <div class="sidebar-note">
     <svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/><path d="M5 12h4l2-4 3 8 2-4h3"/></svg>
@@ -48,7 +49,7 @@
 
   <section class="card">
     <h2><span class="heading-title"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 21v-2a6.5 6.5 0 0 1 13 0v2M19 8v6m-3-3h6"/></svg>Nuevo paciente</span></h2>
-    <p class="form-caption">Completa los datos personales y, si corresponde, la asignación de triaje y cama.</p>
+    <p class="form-caption">Completa los datos personales y, si el paciente pasa por triaje, registra el nivel, el motivo y los signos vitales.</p>
 
     <form id="formPaciente" novalidate>
       <div class="form-grid">
@@ -81,7 +82,7 @@
         </div>
 
         <div class="campo">
-          <label for="triaje">Triaje <span class="hint">(opcional)</span></label>
+          <label for="triaje">Nivel de triaje <span class="hint">(opcional)</span></label>
           <select id="triaje" name="triaje">
             <option value="">Sin asignar</option>
             <option>Nivel I</option>
@@ -93,9 +94,28 @@
         </div>
 
         <div class="campo">
-          <label for="cama">Cama <span class="hint">(opcional)</span></label>
-          <input id="cama" name="cama" type="text" placeholder="UCI-02" autocomplete="off">
-          <span class="error" id="camaError"></span>
+          <label for="triaje_fecha">Fecha y hora del triaje <span class="hint">(opcional)</span></label>
+          <input id="triaje_fecha" name="triaje_fecha" type="datetime-local">
+          <span class="error" id="triaje_fechaError"></span>
+        </div>
+
+        <div class="campo campo-completo">
+          <label for="motivo">Motivo de consulta <span class="hint">(triaje)</span></label>
+          <input id="motivo" name="motivo" type="text" maxlength="200"
+                 placeholder="Dolor abdominal de 12 horas" autocomplete="off">
+          <span class="error" id="motivoError"></span>
+        </div>
+
+        <div class="campo campo-completo">
+          <label for="signos">Signos vitales <span class="hint">(triaje)</span></label>
+          <input id="signos" name="signos" type="text" maxlength="200"
+                 placeholder="TA 120/80 · FC 88 · T 36.8 °C · SpO2 98 %" autocomplete="off">
+          <span class="error" id="signosError"></span>
+        </div>
+
+        <div class="campo campo-completo">
+          <label>Cama asignada</label>
+          <p class="cama-nota">La cama se asigna en <a href="camas.html">Camas y disponibilidad</a>, solo entre las camas libres del área. La lista de pacientes se ordena por gravedad: el Nivel I aparece primero.</p>
         </div>
 
       </div>
@@ -126,6 +146,7 @@
             <th>Edad</th>
             <th>Teléfono</th>
             <th>Triaje</th>
+            <th>Motivo</th>
             <th>Cama</th>
             <th></th>
           </tr>

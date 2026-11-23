@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Camas y disponibilidad · Sistema de Gestión Hospitalaria</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Sistema de Gestión Hospitalaria, inicio">
+    <span class="brand-mark"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span>
+    <span><strong>Gestión<br>Hospitalaria</strong><small>Personas. Atención. Bienestar.</small></span>
+  </a>
+  <p class="nav-label">ESPACIO DE TRABAJO</p>
+  <nav class="nav" aria-label="Navegación principal">
+    <a href="index.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Inicio</span></a>
+    <a href="pacientes.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M2 21v-3a7 7 0 0 1 14 0v3M16 4a3 3 0 0 1 0 6m3 11v-3a7 7 0 0 0-2-5"/></svg><span>Pacientes</span></a>
+    <a href="consulta.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5M8 10.5h5m-2.5-2.5v5"/></svg><span>Consulta</span></a>
+    <a href="centros.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 21v-5h6v5M9 9h6m-3-3v6M7 2h10"/></svg><span>Centros médicos</span></a>
+    <a href="areas.html"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 3v7M14 6.5h7M3 17.5h7m-3.5-3.5v7"/></svg><span>Áreas hospitalarias</span></a>
+    <a href="camas.html" aria-current="page"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8M3 17h18M7 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M15 10V8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2"/></svg><span>Camas</span></a>
+  </nav>
+  <div class="sidebar-note">
+    <svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/><path d="M5 12h4l2-4 3 8 2-4h3"/></svg>
+    <strong>Una cama libre, una atención a tiempo.</strong>
+    <p>La disponibilidad se actualiza al ocupar o liberar cada cama.</p>
+  </div>
+  <div class="sidebar-foot"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Sistema de Gestión Hospitalaria</span></div>
+</header>
+<div class="workspace-bar">
+  <div class="workspace-path"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M9 21v-5h6v5M9 9h6m-3-3v6M7 2h10"/></svg><span>Gestión hospitalaria</span><span>/</span><strong>Camas y disponibilidad</strong></div>
+  <div class="workspace-identity"><span>Atención y administración</span><span class="identity-mark" aria-label="Sistema de Gestión Hospitalaria">SGH</span></div>
+</div>
+
+<main id="contenido">
+
+  <div class="crumbs"><a href="index.html">Inicio</a> / Camas</div>
+
+  <div class="page-head">
+    <span class="eyebrow">CAPACIDAD INSTALADA</span>
+    <h1>Camas y disponibilidad</h1>
+    <p>Registra habitaciones y camas por área, consulta las camas libres y asigna una al paciente.</p>
+  </div>
+
+  <div id="aviso" class="alerta" role="status" aria-live="polite"></div>
+
+  <section class="card">
+    <h2><span class="heading-title"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8M3 17h18M7 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M15 10V8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2"/></svg>Disponibilidad de camas</span><span class="hint" id="contadorDisponibles">0 camas libres</span></h2>
+    <p class="form-caption">Filtra por centro, área o estado para ubicar rápido una cama libre.</p>
+
+    <div class="buscador filtros-camas">
+      <div class="campo">
+        <label for="filtroCentro">Centro médico</label>
+        <select id="filtroCentro"><option value="">Todos los centros</option></select>
+      </div>
+      <div class="campo">
+        <label for="filtroArea">Área</label>
+        <select id="filtroArea"><option value="">Todas las áreas</option></select>
+      </div>
+      <div class="campo">
+        <label for="filtroEstado">Estado</label>
+        <select id="filtroEstado">
+          <option value="">Todos los estados</option>
+          <option value="Disponible">Disponible</option>
+          <option value="Ocupada">Ocupada</option>
+          <option value="Mantenimiento">Mantenimiento</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="filtroCamas">Buscar cama</label>
+        <input id="filtroCamas" type="search" placeholder="Código, habitación o paciente" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="dispo-cifras" id="dispoCifras"></div>
+    <div class="dispo-grid" id="disponibilidad" aria-live="polite"></div>
+  </section>
+
+  <section class="card">
+    <h2><span class="heading-title"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h2m4 0h2M8 12h2m4 0h2M8 17h2m4 0h2"/></svg>Habitaciones</span><span class="hint" id="contadorHabitaciones">0 habitaciones</span></h2>
+    <p class="form-caption">Cada habitación pertenece a un área del centro médico y agrupa sus camas.</p>
+
+    <div id="sinAreas" class="vacio-estado" style="display:none">
+      Todavía no hay áreas registradas. <a href="areas.html">Crea un área</a> antes de agregar habitaciones.
+    </div>
+
+    <form id="formHabitacion" novalidate>
+      <div class="form-grid">
+        <div class="campo">
+          <label for="areaId">Área <span class="req">*</span></label>
+          <select id="areaId"></select>
+          <span class="error" id="areaIdError"></span>
+        </div>
+        <div class="campo">
+          <label for="numero">Número de habitación <span class="req">*</span></label>
+          <input id="numero" type="text" maxlength="20" placeholder="201" autocomplete="off">
+          <span class="error" id="numeroError"></span>
+        </div>
+        <div class="campo">
+          <label for="piso">Piso <span class="req">*</span></label>
+          <input id="piso" type="text" maxlength="10" placeholder="2" autocomplete="off">
+          <span class="error" id="pisoError"></span>
+        </div>
+        <div class="campo">
+          <label for="tipoHabitacion">Tipo <span class="req">*</span></label>
+          <select id="tipoHabitacion">
+            <option value="">Selecciona un tipo</option>
+            <option>Individual</option>
+            <option>Doble</option>
+            <option>UCI</option>
+            <option>Aislamiento</option>
+            <option>Observación</option>
+          </select>
+          <span class="error" id="tipoError"></span>
+        </div>
+      </div>
+      <div class="acciones">
+        <button type="submit" class="btn"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z"/><path d="M7 3v6h10V3M7 21v-8h10v8"/></svg>Guardar habitación</button>
+        <button type="reset" class="btn secundario"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg>Limpiar</button>
+      </div>
+    </form>
+
+    <div class="tabla-wrap">
+      <table class="tabla tabla-camas">
+        <thead>
+          <tr><th>Habitación</th><th>Piso</th><th>Tipo</th><th>Área</th><th>Centro</th><th>Camas</th><th>Libres</th><th></th></tr>
+        </thead>
+        <tbody id="tablaHabitaciones"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="heading-title"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8M3 17h18M7 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M15 10V8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2"/></svg>Camas</span><span class="hint" id="contadorCamas">0 camas</span></h2>
+    <p class="form-caption">Cada cama tiene un código único y un estado. La cama ocupada se libera al dar de alta al paciente.</p>
+
+    <div id="sinHabitaciones" class="vacio-estado" style="display:none">
+      Todavía no hay habitaciones registradas. Crea una arriba para poder agregar camas.
+    </div>
+
+    <form id="formCama" novalidate>
+      <div class="form-grid">
+        <div class="campo">
+          <label for="habitacionId">Habitación <span class="req">*</span></label>
+          <select id="habitacionId"></select>
+          <span class="error" id="habitacionIdError"></span>
+        </div>
+        <div class="campo">
+          <label for="codigo">Código de cama <span class="req">*</span></label>
+          <input id="codigo" type="text" maxlength="20" placeholder="E-05" autocomplete="off">
+          <span class="error" id="codigoError"></span>
+        </div>
+        <div class="campo">
+          <label for="estadoCama">Estado <span class="req">*</span></label>
+          <select id="estadoCama">
+            <option>Disponible</option>
+            <option>Mantenimiento</option>
+            <option>Ocupada</option>
+          </select>
+          <span class="error" id="estadoError"></span>
+        </div>
+        <div class="campo campo-completo">
+          <label for="observacion">Observación <span class="hint">(opcional)</span></label>
+          <input id="observacion" type="text" maxlength="200" placeholder="Cama junto a la ventana" autocomplete="off">
+          <span class="error" id="observacionError"></span>
+        </div>
+      </div>
+      <div class="acciones">
+        <button type="submit" class="btn"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z"/><path d="M7 3v6h10V3M7 21v-8h10v8"/></svg>Guardar cama</button>
+        <button type="reset" class="btn secundario"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/></svg>Limpiar</button>
+      </div>
+    </form>
+
+    <div class="tabla-wrap">
+      <table class="tabla tabla-camas">
+        <thead>
+          <tr><th>Código</th><th>Habitación</th><th>Área</th><th>Centro</th><th>Estado</th><th>Paciente</th><th></th></tr>
+        </thead>
+        <tbody id="tablaCamas"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="heading-title"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6m3-3h-6"/></svg>Asignar cama a un paciente</span></h2>
+    <p class="form-caption">Solo se ofrecen camas disponibles y pacientes sin cama. Al guardar, la cama pasa a ocupada.</p>
+
+    <div id="sinAsignacion" class="vacio-estado" style="display:none">
+      No hay camas disponibles o todos los pacientes ya tienen una cama asignada.
+    </div>
+
+    <form id="formAsignar" novalidate>
+      <div class="form-grid">
+        <div class="campo">
+          <label for="camaLibre">Cama disponible <span class="req">*</span></label>
+          <select id="camaLibre"></select>
+          <span class="error" id="camaLibreError"></span>
+        </div>
+        <div class="campo">
+          <label for="pacienteSinCama">Paciente <span class="req">*</span></label>
+          <select id="pacienteSinCama"></select>
+          <span class="error" id="pacienteSinCamaError"></span>
+        </div>
+      </div>
+      <div class="acciones">
+        <button type="submit" class="btn"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Asignar cama</button>
+      </div>
+    </form>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <span>Sistema de Gestión Hospitalaria · <span id="anio">2026</span></span>
+  <span class="footer-note"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg> Datos guardados en SQLite</span>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/camas.js"></script>
+</body>
+</html>

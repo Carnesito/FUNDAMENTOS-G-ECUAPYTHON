@@ -44,6 +44,9 @@ window.Hospital = window.Hospital || {};
       })).registro;
     },
     eliminar: function (coleccion, id) { return solicitar(ruta(coleccion, id), {method: "DELETE"}); },
-    resumen: function () { return solicitar("/resumen"); }
+    resumen: function () { return solicitar("/resumen"); },
+    disponibilidad: function (filtros) {
+      return solicitar("/disponibilidad?" + new URLSearchParams(filtros || {}));
+    }
   };
 })(window.Hospital);

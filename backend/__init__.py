@@ -58,6 +58,10 @@ def create_app(database_path=None, servir_frontend=True):
         mensaje = str(error)
         if "pacientes.cedula" in mensaje:
             return jsonify(error="Ya existe un paciente con esa cédula.", campo="cedula"), 409
+        if "camas.codigo_clave" in mensaje:
+            return jsonify(error="Ya existe una cama con ese código.", campo="codigo"), 409
+        if "habitaciones" in mensaje and "numero_clave" in mensaje:
+            return jsonify(error="Ya existe una habitación con ese número en el área.", campo="numero"), 409
         if "nombre_clave" in mensaje:
             return jsonify(error="Ya existe un registro con ese nombre en este centro o colección.", campo="nombre"), 409
         return jsonify(error="El registro entra en conflicto con los datos existentes."), 409

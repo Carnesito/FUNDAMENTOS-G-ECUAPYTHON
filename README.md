@@ -1,7 +1,8 @@
 # Sistema de Gestión Hospitalaria — Flask + SQLite
 
-Aplicación del Sprint 1 (pacientes, consulta, centros y áreas) con frontend y backend separados.
-Permite crear, consultar, editar y eliminar registros. Los datos existentes de SQLite se conservan.
+Aplicación de los Sprint 1 y 2 (pacientes, triaje, consulta, centros, áreas, habitaciones y camas)
+con frontend y backend separados. Permite crear, consultar, editar y eliminar registros, clasificar
+por gravedad y asignar camas disponibles. Los datos existentes de SQLite se conservan.
 
 ## Arquitectura
 
@@ -16,12 +17,15 @@ SQLite: data/hospital.db
 ```
 
 - `frontend/` contiene las páginas, estilos, ilustraciones y controladores de interfaz.
-  `js/api.js` hace peticiones HTTP; `js/crud.js` conecta los formularios y las tablas.
-  No utiliza localStorage ni datos simulados. Las listas, fichas, filtros y contadores se consultan en el servidor.
+  `js/api.js` hace peticiones HTTP; `js/crud.js` conecta los formularios y las tablas y
+  `js/camas.js` controla la disponibilidad y la asignación. No utiliza localStorage ni datos
+  simulados: las listas, fichas, filtros y contadores se consultan en el servidor.
 - `backend/` implementa una API REST independiente. Valida también las solicitudes que llegan sin navegador.
   `repositorios.py` contiene SQL; `servicios.py` controla las transacciones; `rutas.py` expone JSON.
-- SQLite aplica la cédula única, nombres normalizados únicos y relaciones entre centros y áreas.
-  Eliminar un centro elimina sus áreas en la misma transacción.
+- SQLite aplica la cédula única, nombres normalizados únicos, códigos de cama únicos y relaciones
+  entre centros, áreas, habitaciones y camas. Una cama solo puede pertenecer a un paciente y, al
+  ocuparla, el paciente recibe el código en su ficha. Eliminar un centro elimina sus áreas,
+  habitaciones y camas en la misma transacción y libera las referencias de los pacientes.
 - En el uso normal, un servidor Waitress entrega el frontend y la API en la misma dirección.
   Para desarrollo también se pueden ejecutar en dos servidores independientes.
 
@@ -114,11 +118,12 @@ Para desarrollar el backend con recarga automática también puedes usar:
 │   ├── errores.py         Errores controlados de la aplicación
 │   └── utilidades.py      Normalización de texto
 ├── frontend/
-│   ├── index.html, pacientes.html, consulta.html, centros.html, areas.html
+│   ├── index.html, pacientes.html, consulta.html, centros.html, areas.html, camas.html
 │   ├── css/style.css
 │   ├── assets/hospital.svg
 │   ├── js/api.js          Cliente HTTP sin almacenamiento local
 │   ├── js/crud.js         Formularios y acciones de las tablas
+│   ├── js/camas.js        Habitaciones, disponibilidad y asignación de camas
 │   ├── js/ui.js           Formato, avisos y utilidades de presentación
 │   ├── js/inicio.js, pacientes.js, consulta.js, centros.js, areas.js
 │   └── servidor.py        Servidor de desarrollo independiente con proxy
@@ -139,7 +144,9 @@ Para desarrollar el backend con recarga automática también puedes usar:
 
 La versión fuente guarda los registros en `data/hospital.db` de la raíz del proyecto.
 La versión portable usa `data/hospital.db` junto a `Hospital.exe`; ambas son copias independientes.
-Al instalar el programa por primera vez se cargan 3 pacientes, 2 centros y 3 áreas de ejemplo.
+Al instalar el programa por primera vez se cargan 3 pacientes, 2 centros, 4 áreas, 2 habitaciones
+y 4 camas de ejemplo. Si la base viene del Sprint 1, la migración conserva los registros y agrega
+las columnas de triaje y las tablas de habitaciones y camas.
 Si borras registros, no se vuelven a insertar al reiniciar.
 
 Para trasladar el programa con sus registros actualizados, apágalo y comprime toda la
@@ -148,7 +155,7 @@ momento en que se generó; no se actualiza solo. Si envías únicamente el EXE s
 una base nueva con los ejemplos. Para respaldar datos, copia el `.db` con el programa apagado.
 Los datos de la antigua versión basada en el navegador no se importan automáticamente.
 
-Está preparado para el uso local académico del Sprint 1. No incluye autenticación de usuarios.
+Está preparado para el uso local académico del Sprint 2. No incluye autenticación de usuarios.
 
 ## Construir las entregas después de cambiar el código
 
@@ -170,7 +177,9 @@ fuente o se crean los ejemplos. El ZIP del código fuente incluye una copia cohe
 .\.venv\Scripts\python.exe tests\verificar_portable.py
 ```
 
-Las pruebas comprueban CRUD, validaciones del servidor, búsquedas SQL, duplicados concurrentes,
-relaciones y borrado en cascada, persistencia, archivos privados y frontend/backend en dos servidores.
+Las pruebas comprueban CRUD, validaciones del servidor, triaje y orden por gravedad, habitaciones y
+camas, disponibilidad por centro y área, asignación y liberación de camas, búsquedas SQL, duplicados
+concurrentes, relaciones y borrado en cascada, persistencia, archivos privados y frontend/backend
+en dos servidores.
 La segunda prueba extrae el ZIP en otra ubicación e inicia el EXE sin Python en PATH, comprobando
 recursos, puertos ocupados y conservación de datos al reiniciar.
