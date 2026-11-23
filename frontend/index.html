@@ -65,6 +65,40 @@
       <div class="stat"><span class="stat-icon"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8M3 17h18M7 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M15 10V8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2"/></svg></span><div><b id="statCamas">0</b><span>Camas disponibles</span></div><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8M3 17h18M7 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M15 10V8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2"/></svg></div>
     </div>
   </section>
+  <section class="ops" aria-labelledby="ops-title">
+    <div class="section-heading"><h2 id="ops-title">Panel operativo</h2><span id="opsActualizado">Actualizando…
+</span></div>
+    <div class="ops-grid">
+      <article class="card ops-card" aria-labelledby="opsCamasTitle">
+        <div class="ops-head"><h3 id="opsCamasTitle">Ocupación de camas</h3><span class="hint" id="opsOcupacionPct">—</span></div>
+        <p class="ops-big"><b id="opsOcupadas">0</b><span>de <b id="opsTotal">0</b> camas ocupadas</span></p>
+        <div class="barra ops-barra" role="img" id="opsBarraImg" aria-label="Ocupación de camas"><i id="opsBarra"></i></div>
+        <ul class="ops-leyenda">
+          <li><i class="punto disponible"></i>Libres <b id="opsLibres">0</b></li>
+          <li><i class="punto ocupada"></i>Ocupadas <b id="opsOcupadasLeyenda">0</b></li>
+          <li><i class="punto mantenimiento"></i>Mantenimiento <b id="opsMantenimiento">0</b></li>
+        </ul>
+      </article>
+      <article class="card ops-card" aria-labelledby="opsTriajeTitle">
+        <div class="ops-head"><h3 id="opsTriajeTitle">Pacientes por prioridad</h3><span class="hint" id="opsTriajeTotal">0 pacientes</span></div>
+        <div id="opsTriaje" class="triaje-lista skeleton" aria-live="polite"></div>
+      </article>
+    </div>
+    <article class="card ops-tabla">
+      <div class="ops-head">
+        <h3>Pacientes que requieren atención primero</h3>
+        <a class="text-link" href="pacientes.html">Ver todos <svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+      </div>
+      <p class="form-caption">Ordenados por nivel de triaje: el Nivel I se atiende primero.</p>
+      <div class="tabla-wrap">
+        <table class="tabla">
+          <thead><tr><th>Paciente</th><th>Triaje</th><th>Motivo</th><th>Cama</th></tr></thead>
+          <tbody id="tablaPrioridad"></tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+
   <section aria-labelledby="modules-title">
     <div class="section-heading"><h2 id="modules-title">¿Qué necesitas hacer hoy?</h2><span>Acceso a los módulos</span></div>
     <div class="grid">

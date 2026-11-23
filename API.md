@@ -58,7 +58,10 @@ La lista de pacientes se ordena por gravedad (Nivel I, II, III, IV y sin asignar
 `AAAA-MM-DD` entre 1900 y hoy; teléfono de 7 a 10 dígitos. Triaje admite cadena vacía o
 `Nivel I` a `Nivel IV`. `motivo` y `signos` admiten hasta 200 caracteres; `triaje_fecha` acepta
 `AAAA-MM-DD HH:MM` o `AAAA-MM-DDTHH:MM`. La respuesta incluye `cama` como solo lectura: se
-actualiza al asignar o liberar una cama y no se puede escribir directamente.
+calcula con la cama realmente asignada en el catálogo y no se puede escribir directamente.
+`camaHeredada` conserva la cama escrita como texto libre en el Sprint 1 cuando ese código no
+existe en el catálogo; el paciente sigue disponible para recibir una cama real y, al asignarla,
+el texto heredado se limpia.
 
 **Centros:** `nombre`, `direccion`, `telefono`. Todos obligatorios; nombre de al menos
 3 caracteres y único sin distinguir mayúsculas ni tildes; teléfono de 7 a 10 dígitos.

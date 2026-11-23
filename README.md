@@ -146,7 +146,9 @@ La versión fuente guarda los registros en `data/hospital.db` de la raíz del pr
 La versión portable usa `data/hospital.db` junto a `Hospital.exe`; ambas son copias independientes.
 Al instalar el programa por primera vez se cargan 3 pacientes, 2 centros, 4 áreas, 2 habitaciones
 y 4 camas de ejemplo. Si la base viene del Sprint 1, la migración conserva los registros y agrega
-las columnas de triaje y las tablas de habitaciones y camas.
+las columnas de triaje y las tablas de habitaciones y camas. Las camas escritas como texto libre
+en el Sprint 1 que coinciden con una cama del catálogo se asignan automáticamente; las demás
+quedan como «cama heredada» y el paciente puede recibir una cama real desde Camas.
 Si borras registros, no se vuelven a insertar al reiniciar.
 
 Para trasladar el programa con sus registros actualizados, apágalo y comprime toda la

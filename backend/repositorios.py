@@ -12,6 +12,14 @@ BUSQUEDAS = {
 
 
 def seleccion(coleccion):
+    if coleccion == "pacientes":
+        # La cama que se muestra es la realmente asignada en el catálogo de camas;
+        # el texto libre del Sprint 1 queda como referencia en `camaHeredada`.
+        campos = ", ".join(
+            "COALESCE((SELECT ca.codigo FROM camas ca WHERE ca.pacienteId = r.id "
+            "ORDER BY ca.codigo LIMIT 1), '') AS cama"
+            if campo == "cama" else "r." + campo for campo in CAMPOS[coleccion])
+        return f"SELECT {campos}, r.cama_heredada AS camaHeredada FROM pacientes r"
     campos = ", ".join("r." + campo for campo in CAMPOS[coleccion])
     if coleccion == "centros":
         return (f"SELECT {campos}, (SELECT COUNT(*) FROM areas a WHERE a.centroId = r.id) AS areasCount "

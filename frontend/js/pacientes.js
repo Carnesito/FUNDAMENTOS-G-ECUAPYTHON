@@ -8,10 +8,13 @@
     campos: ["cedula", "nombres", "nacimiento", "telefono", "triaje", "motivo", "signos", "triaje_fecha"],
     filtros: function () { return {q: document.getElementById("filtro").value.trim()}; },
     celdas: function (p) {
+      var cama = p.cama ? ui.escapar(p.cama) :
+        (p.camaHeredada ? '<span class="tag cama-heredada" title="Cama escrita como texto en el Sprint 1; todavía no está vinculada al catálogo de camas">' +
+          "Heredada: " + ui.escapar(p.camaHeredada) + "</span>" : "Sin asignar");
       return "<td>" + ui.escapar(p.cedula) + "</td><td>" + ui.escapar(p.nombres) + "</td><td>" +
         ui.edad(p.nacimiento) + "</td><td>" + ui.escapar(p.telefono) + "</td><td>" + ui.triaje(p.triaje) +
         '</td><td class="motivo-celda" title="' + ui.escapar(p.motivo || "") + '">' +
-        ui.escapar(p.motivo || "—") + "</td><td>" + ui.escapar(p.cama || "Sin asignar") + "</td>";
+        ui.escapar(p.motivo || "—") + "</td><td>" + cama + "</td>";
     }
   });
 

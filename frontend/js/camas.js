@@ -122,13 +122,15 @@
     var libres = datos.camas.filter(function (c) {
       return c.estado === "Disponible" && !c.pacienteId;
     });
+    // `cama` solo trae camas realmente asignadas; los textos del Sprint 1 no bloquean.
     var sinCama = datos.pacientes.filter(function (p) { return !p.cama; });
     var cama = el("camaLibre").value, paciente = el("pacienteSinCama").value;
     llenar(el("camaLibre"), libres.map(function (c) {
       return {valor: c.id, texto: c.codigo + " · " + c.areaNombre + " · " + c.centroNombre};
     }), "Selecciona una cama", cama);
     llenar(el("pacienteSinCama"), sinCama.map(function (p) {
-      return {valor: p.id, texto: p.nombres + " · " + p.cedula};
+      return {valor: p.id, texto: p.nombres + " · " + p.cedula +
+        (p.camaHeredada ? " · cama heredada: " + p.camaHeredada : "")};
     }), "Selecciona un paciente", paciente);
     var vacio = !libres.length || !sinCama.length;
     el("sinAsignacion").style.display = vacio ? "block" : "none";

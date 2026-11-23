@@ -27,8 +27,18 @@ def create_app(database_path=None, servir_frontend=True):
     @app.after_request
     def cabeceras(respuesta):
         respuesta.headers["X-Content-Type-Options"] = "nosniff"
+        respuesta.headers["X-Frame-Options"] = "DENY"
+        respuesta.headers["Referrer-Policy"] = "no-referrer"
+        respuesta.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+        respuesta.headers["Content-Security-Policy"] = (
+            "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; "
+            "script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; "
+            "form-action 'self'; frame-ancestors 'none'")
         if request.path.startswith("/api/"):
             respuesta.headers["Cache-Control"] = "no-store"
+        elif request.path.startswith(("/css/", "/js/", "/assets/")):
+            # Los recursos estáticos llevan ETag; se revalidan en cada carga.
+            respuesta.headers["Cache-Control"] = "no-cache"
         return respuesta
 
     if servir_frontend:

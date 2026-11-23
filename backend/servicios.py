@@ -35,6 +35,11 @@ def sincronizar_cama(db, paciente_id):
             (SELECT codigo FROM camas WHERE pacienteId = ? ORDER BY codigo LIMIT 1), '')
         WHERE id = ?
     """, (paciente_id, paciente_id))
+    # Al quedar vinculado a una cama real, el texto heredado del Sprint 1 ya no aplica.
+    db.execute("""
+        UPDATE pacientes SET cama_heredada = ''
+        WHERE id = ? AND EXISTS (SELECT 1 FROM camas WHERE pacienteId = ?)
+    """, (paciente_id, paciente_id))
 
 
 def _pacientes_afectados(db, coleccion, identificador):

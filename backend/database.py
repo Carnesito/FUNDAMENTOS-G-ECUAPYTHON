@@ -4,7 +4,7 @@ import sqlite3
 from flask import current_app, g
 from .utilidades import normalizar
 
-VERSION_ESQUEMA = 2
+VERSION_ESQUEMA = 3
 
 ESQUEMA = """
 CREATE TABLE IF NOT EXISTS pacientes (
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS pacientes (
     telefono TEXT NOT NULL, triaje TEXT NOT NULL DEFAULT '',
     cama TEXT NOT NULL DEFAULT '',
     motivo TEXT NOT NULL DEFAULT '', signos TEXT NOT NULL DEFAULT '',
-    triaje_fecha TEXT NOT NULL DEFAULT ''
+    triaje_fecha TEXT NOT NULL DEFAULT '', cama_heredada TEXT NOT NULL DEFAULT ''
 );
 CREATE TABLE IF NOT EXISTS centros (
     id TEXT PRIMARY KEY, nombre TEXT NOT NULL,
@@ -47,15 +47,15 @@ CREATE UNIQUE INDEX IF NOT EXISTS camas_paciente ON camas(pacienteId) WHERE paci
 
 def _ejemplos_iniciales(conexion):
     """Carga los ejemplos una sola vez, incluso si luego se borran todos."""
-    conexion.executemany("INSERT INTO pacientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+    conexion.executemany("INSERT INTO pacientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
         ("p1", "0951234567", "María Fernanda Vera López", "1992-04-18", "0991234567",
          "Nivel III", "", "Dolor abdominal de 12 horas", "TA 118/76 · FC 88 · T 36.8 °C · SpO2 97 %",
-         "2026-11-20 08:15"),
+         "2026-11-20 08:15", ""),
         ("p2", "0104567890", "Luis Alberto Cárdenas Paredes", "1978-11-02", "0987654321",
          "Nivel II", "", "Traumatismo en miembro inferior derecho", "TA 130/85 · FC 96 · T 37.1 °C · SpO2 96 %",
-         "2026-11-20 09:40"),
+         "2026-11-20 09:40", ""),
         ("p3", "1723456789", "Ana Sofía Zambrano Ruiz", "2001-07-25", "0976543210",
-         "", "", "", "", ""),
+         "", "", "", "", "", ""),
     ])
     for clave, nombre, direccion, telefono in [
         ("c1", "Hospital Santa Vida", "Av. Amazonas 123", "022345678"),
@@ -107,8 +107,39 @@ def _habitaciones_iniciales(conexion):
                          (primera[0],))
 
 
+def _reconciliar_camas_heredadas(conexion):
+    """Vincula las camas escritas como texto libre en el Sprint 1 con el catálogo de camas.
+
+    Si el código escrito coincide con una cama libre, la cama se asigna de verdad.
+    Si no existe o ya está ocupada, el texto se conserva en `cama_heredada` y el
+    paciente queda libre para que se le asigne una cama real desde la aplicación.
+    """
+    for paciente_id, texto in conexion.execute(
+            "SELECT id, cama FROM pacientes WHERE TRIM(cama) <> ''").fetchall():
+        if conexion.execute("SELECT 1 FROM camas WHERE pacienteId = ?", (paciente_id,)).fetchone():
+            continue
+        cama = conexion.execute(
+            "SELECT id, codigo FROM camas WHERE codigo_clave = ? AND pacienteId = '' LIMIT 1",
+            (normalizar(texto),)).fetchone()
+        if cama:
+            conexion.execute("UPDATE camas SET pacienteId = ?, estado = 'Ocupada' WHERE id = ?",
+                             (paciente_id, cama[0]))
+            conexion.execute("UPDATE pacientes SET cama = ?, cama_heredada = '' WHERE id = ?",
+                             (cama[1], paciente_id))
+        else:
+            conexion.execute("UPDATE pacientes SET cama = '', cama_heredada = ? WHERE id = ?",
+                             (texto, paciente_id))
+    # Las camas ya asignadas mandan sobre cualquier texto anterior.
+    conexion.execute("""
+        UPDATE pacientes SET cama = COALESCE(
+            (SELECT codigo FROM camas WHERE pacienteId = pacientes.id ORDER BY codigo LIMIT 1), ''),
+            cama_heredada = ''
+        WHERE EXISTS (SELECT 1 FROM camas WHERE pacienteId = pacientes.id)
+    """)
+
+
 def inicializar(conexion):
-    """Aplica el esquema del Sprint 2 sin perder los datos del Sprint 1."""
+    """Aplica el esquema del Sprint 2 y la reconciliación del Sprint 1 sin perder datos."""
     version = conexion.execute("PRAGMA user_version").fetchone()[0]
     if version >= VERSION_ESQUEMA:
         return
@@ -119,12 +150,14 @@ def inicializar(conexion):
             ("motivo", "TEXT NOT NULL DEFAULT ''"),
             ("signos", "TEXT NOT NULL DEFAULT ''"),
             ("triaje_fecha", "TEXT NOT NULL DEFAULT ''"),
+            ("cama_heredada", "TEXT NOT NULL DEFAULT ''"),
         ):
             if nombre not in columnas:
                 conexion.execute(f"ALTER TABLE pacientes ADD COLUMN {nombre} {definicion}")
         if version == 0:
             _ejemplos_iniciales(conexion)
         _habitaciones_iniciales(conexion)
+        _reconciliar_camas_heredadas(conexion)
         conexion.execute(f"PRAGMA user_version = {VERSION_ESQUEMA}")
         conexion.commit()
     except Exception:

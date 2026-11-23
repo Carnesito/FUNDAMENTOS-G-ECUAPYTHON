@@ -7,6 +7,7 @@ import tempfile
 import unittest
 
 from backend import create_app
+from backend.database import _reconciliar_camas_heredadas
 
 
 class HospitalTest(unittest.TestCase):
@@ -224,6 +225,60 @@ class HospitalTest(unittest.TestCase):
         self.assertEqual(self.cliente.get("/api/pacientes/" + paciente["id"]).json["registro"]["cama"], "")
         self.assertEqual(self.cliente.delete("/api/habitaciones/" + habitacion_id).status_code, 204)
         self.assertEqual(self.cliente.get("/api/camas/" + cama_id).status_code, 404)
+
+    def test_reconciliacion_de_camas_heredadas(self):
+        with closing(sqlite3.connect(":memory:")) as conexion:
+            conexion.executescript("""
+                CREATE TABLE pacientes (id TEXT PRIMARY KEY, nombres TEXT,
+                    cama TEXT NOT NULL DEFAULT '', cama_heredada TEXT NOT NULL DEFAULT '');
+                CREATE TABLE camas (id TEXT PRIMARY KEY, codigo TEXT, codigo_clave TEXT,
+                    pacienteId TEXT NOT NULL DEFAULT '', estado TEXT);
+                INSERT INTO pacientes (id, nombres, cama) VALUES
+                    ('a', 'Ana', 'UCI-02'), ('b', 'Beto', '1'), ('c', 'Carla', '');
+                INSERT INTO camas VALUES ('ca', 'UCI-02', 'uci-02', '', 'Disponible');
+            """)
+            _reconciliar_camas_heredadas(conexion)
+            self.assertEqual(conexion.execute(
+                "SELECT cama, cama_heredada FROM pacientes WHERE id = 'a'").fetchone(), ("UCI-02", ""))
+            self.assertEqual(conexion.execute(
+                "SELECT pacienteId, estado FROM camas WHERE id = 'ca'").fetchone(), ("a", "Ocupada"))
+            self.assertEqual(conexion.execute(
+                "SELECT cama, cama_heredada FROM pacientes WHERE id = 'b'").fetchone(), ("", "1"))
+
+    def test_base_del_sprint1_migra_y_el_paciente_puede_recibir_cama(self):
+        ruta = Path(self.temporal.name) / "sprint1.db"
+        with closing(sqlite3.connect(ruta)) as conexion:
+            conexion.executescript("""
+                CREATE TABLE pacientes (
+                    id TEXT PRIMARY KEY, cedula TEXT NOT NULL UNIQUE, nombres TEXT NOT NULL,
+                    nacimiento TEXT NOT NULL, telefono TEXT NOT NULL,
+                    triaje TEXT NOT NULL DEFAULT '', cama TEXT NOT NULL DEFAULT '');
+                INSERT INTO pacientes VALUES ('viejo', '1711111111', 'Paciente Heredado',
+                    '1980-01-01', '0999999999', 'Nivel II', 'UCI-02');
+                PRAGMA user_version = 1;
+            """)
+            conexion.commit()
+        cliente = create_app(ruta).test_client()
+        heredado = cliente.get("/api/pacientes/viejo").json["registro"]
+        self.assertEqual(heredado["cama"], "")
+        self.assertEqual(heredado["camaHeredada"], "UCI-02")
+        self.assertIn(heredado["id"], [p["id"] for p in cliente.get("/api/pacientes").json["registros"]])
+
+        centro = cliente.post("/api/centros", json={
+            "nombre": "Centro Migrado", "direccion": "Calle Uno", "telefono": "022345678"}).json["registro"]
+        area = cliente.post("/api/areas", json={
+            "centroId": centro["id"], "nombre": "Hospitalización", "tipo": "Hospitalización"}).json["registro"]
+        habitacion = cliente.post("/api/habitaciones", json={
+            "areaId": area["id"], "numero": "101", "piso": "1", "tipo": "Individual"}).json["registro"]
+        cama = cliente.post("/api/camas", json={
+            "habitacionId": habitacion["id"], "codigo": "H-01", "estado": "Disponible",
+            "pacienteId": "", "observacion": ""}).json["registro"]
+        cliente.put("/api/camas/" + cama["id"], json={
+            "habitacionId": habitacion["id"], "codigo": "H-01", "estado": "Disponible",
+            "pacienteId": "viejo", "observacion": ""})
+        asignado = cliente.get("/api/pacientes/viejo").json["registro"]
+        self.assertEqual(asignado["cama"], "H-01")
+        self.assertEqual(asignado["camaHeredada"], "")
 
     def test_backend_puede_funcionar_sin_frontend(self):
         cliente_api = create_app(self.db, servir_frontend=False).test_client()
