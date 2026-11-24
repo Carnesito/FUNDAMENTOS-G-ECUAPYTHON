@@ -18,7 +18,14 @@ window.Hospital = window.Hospital || {};
           var aviso = document.createElement("div");
           aviso.className = "alerta visible error";
           aviso.setAttribute("role", "alert");
-          aviso.textContent = error.message + " Recarga la página para reintentar.";
+          aviso.textContent = error.message + " ";
+          // Permite reintentar la carga sin tener que recargar la página a mano.
+          var reintentar = document.createElement("button");
+          reintentar.type = "button";
+          reintentar.className = "btn secundario chico";
+          reintentar.textContent = "Reintentar";
+          reintentar.addEventListener("click", function () { location.reload(); });
+          aviso.appendChild(reintentar);
           document.querySelector("main").prepend(aviso);
         }
       }
