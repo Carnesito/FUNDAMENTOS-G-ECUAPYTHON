@@ -29,6 +29,7 @@ def crear_servidor(puerto=5500, api="http://127.0.0.1:5000"):
             self.wfile.write(cuerpo)
 
         def proxy(self):
+            # Solo se atiende a este equipo y a peticiones del mismo origen.
             if self.headers.get("Host", "").split(":")[0] not in {"127.0.0.1", "localhost"}:
                 return self.error_json(400, "Host no permitido.")
             if not self.path.startswith("/api/"):
@@ -42,6 +43,7 @@ def crear_servidor(puerto=5500, api="http://127.0.0.1:5000"):
                 return self.error_json(400, "Longitud de solicitud no válida.")
             if longitud < 0 or longitud > 32 * 1024:
                 return self.error_json(413, "El registro es demasiado grande.")
+            # Se lee el cuerpo enviado por el navegador para reenviarlo tal cual a la API.
             cuerpo = self.rfile.read(longitud) if longitud else None
             cabeceras = {"Content-Type": self.headers.get("Content-Type", "application/json")}
             solicitud = Request(api.rstrip("/") + self.path, data=cuerpo, headers=cabeceras, method=self.command)

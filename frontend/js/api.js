@@ -8,9 +8,11 @@ window.Hospital = window.Hospital || {};
     }
     var respuesta;
     var control = new AbortController();
+    // Límite de 15 s: si el backend no responde, la interfaz no queda esperando.
     var limite = setTimeout(function () { control.abort(); }, 15000);
     try {
       respuesta = await fetch("/api" + ruta, Object.assign({cache: "no-store", signal: control.signal}, opciones));
+      // DELETE responde 204 sin cuerpo: no hay JSON que leer.
       if (respuesta.status === 204) return null;
       var contenido = await respuesta.json();
       if (!respuesta.ok) {
