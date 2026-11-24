@@ -19,6 +19,7 @@ def create_app(database_path=None, servir_frontend=True):
 
     @app.before_request
     def comprobar_origen():
+        # Protección CSRF básica: las escrituras solo se aceptan desde este mismo host.
         if request.method in {"POST", "PUT", "DELETE"}:
             origen = request.headers.get("Origin")
             if origen and origen != request.host_url.rstrip("/"):

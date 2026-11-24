@@ -67,6 +67,8 @@ def guardar(coleccion, entrada, identificador=None):
     comprobar_coleccion(coleccion)
     db = get_db()
     with db:
+        # BEGIN IMMEDIATE serializa las escrituras: dos envíos simultáneos no pueden
+        # crear cédulas ni códigos de cama duplicados.
         db.execute("BEGIN IMMEDIATE")
         anterior = None
         if identificador is not None:
@@ -93,6 +95,7 @@ def eliminar(coleccion, identificador):
         db.execute("BEGIN IMMEDIATE")
         obtener(coleccion, identificador)
         afectados = _pacientes_afectados(db, coleccion, identificador)
+        # Antes de borrar al paciente se liberan sus camas para no dejar referencias rotas.
         if coleccion == "pacientes":
             db.execute("""
                 UPDATE camas SET pacienteId = '',

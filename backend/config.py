@@ -4,9 +4,11 @@ import sys
 
 RAIZ = Path(__file__).resolve().parents[1]
 FRONTEND = RAIZ / "frontend"
+# Con PyInstaller (sys.frozen) los datos viven junto al ejecutable; en el código fuente, en la raíz.
 CARPETA_PROGRAMA = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else RAIZ
 BASE_DATOS = CARPETA_PROGRAMA / "data" / "hospital.db"
 
+# Páginas HTML permitidas: cualquier otro archivo .html se responde con 404.
 PAGINAS = {"index.html", "pacientes.html", "consulta.html", "centros.html", "areas.html", "camas.html"}
 
 # Campos que se leen y se devuelven al navegador.
@@ -29,6 +31,7 @@ EDITABLES = {
     "camas": ("habitacionId", "codigo", "estado", "pacienteId", "observacion"),
 }
 
+# Catálogos cerrados que usan las validaciones antes de escribir en SQLite.
 TIPOS_AREA = {"Emergencia", "Consulta externa", "Hospitalización", "Quirófano", "Laboratorio", "Imágenes"}
 TIPOS_HABITACION = {"Individual", "Doble", "UCI", "Aislamiento", "Observación"}
 ESTADOS_CAMA = {"Disponible", "Ocupada", "Mantenimiento"}

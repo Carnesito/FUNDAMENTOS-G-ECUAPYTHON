@@ -28,6 +28,8 @@ def datos():
 
 @api.get("/<coleccion>")
 def listar(coleccion):
+    # Un solo manejador cubre pacientes, centros, áreas, habitaciones y camas;
+    # los filtros llegan como parámetros de la URL.
     registros = servicios.listar(coleccion, request.args.to_dict())
     return jsonify(registros=registros, total=len(registros))
 
@@ -42,6 +44,7 @@ def crear(coleccion):
     servicios.comprobar_coleccion(coleccion)
     registro = servicios.guardar(coleccion, request.get_json())
     respuesta = jsonify(registro=registro)
+    # 201 Created + Location: la URL del registro recién creado.
     respuesta.headers["Location"] = url_for("api.obtener", coleccion=coleccion, identificador=registro["id"])
     return respuesta, 201
 
@@ -55,4 +58,5 @@ def actualizar(coleccion, identificador):
 @api.delete("/<coleccion>/<identificador>")
 def eliminar(coleccion, identificador):
     servicios.eliminar(coleccion, identificador)
+    # 204 No Content: el borrado se confirma sin cuerpo de respuesta.
     return "", 204
