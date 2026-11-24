@@ -1,4 +1,4 @@
-"""Genera el ejecutable de Windows y su ZIP, conservando SQLite fuera del EXE."""
+"""Genera el ejecutable de Windows y su ZIP, conservando SQLite fuera del EXE :)."""
 from contextlib import closing
 from pathlib import Path
 import sqlite3
