@@ -9,7 +9,7 @@ from zipfile import ZIP_DEFLATED, ZipFile
 from backend import create_app
 from backend.config import BASE_DATOS
 
-# Nota documental 3.
+# Nota documental 4.
 RAIZ = Path(__file__).resolve().parent
 SALIDA = RAIZ / "dist" / "Hospital_Portable"
 INSTRUCCIONES = """SISTEMA DE GESTION HOSPITALARIA - FLASK + SQLITE
