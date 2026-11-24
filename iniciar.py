@@ -21,6 +21,7 @@ def main():
     try:
         servidor = create_server(app, host="127.0.0.1", port=args.puerto)
     except OSError:
+        # Si el puerto pedido está ocupado, se elige uno libre automáticamente.
         if args.puerto == 0:
             raise
         servidor = create_server(app, host="127.0.0.1", port=0)
@@ -30,6 +31,7 @@ def main():
     print(f"Base de datos: {BASE_DATOS}", flush=True)
     print("Mantén esta ventana abierta. Para apagar: Ctrl+C o cierra esta ventana.\n", flush=True)
     if not args.sin_navegador and not args.solo_api:
+        # Se abre el navegador medio segundo después, ya con el servidor escuchando.
         temporizador = threading.Timer(0.5, webbrowser.open, args=(url,))
         temporizador.daemon = True
         temporizador.start()
