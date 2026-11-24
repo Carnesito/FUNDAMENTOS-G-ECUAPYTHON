@@ -925,7 +925,7 @@ table.tabla .vacio {
   flex:1 1 240px
 }
 .card:has(#tablaPacientes)>.buscador {
-  max-width:390px
+  max-width:640px
 }
 .card:has(#tablaAreas)>.buscador {
   max-width:330px

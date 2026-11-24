@@ -99,13 +99,18 @@
       });
 
       var filtro = document.getElementById("filtro");
-      if (filtro) {
-        var temporizador;
-        filtro.addEventListener(filtro.matches("select") ? "change" : "input", function () {
-          clearTimeout(temporizador);
-          temporizador = setTimeout(function () { cargar().catch(function (error) { ui.aviso(error.message, "error"); }); }, 200);
-        });
+      var temporizador;
+      function recargarConFiltros() {
+        clearTimeout(temporizador);
+        temporizador = setTimeout(function () { cargar().catch(function (error) { ui.aviso(error.message, "error"); }); }, 200);
       }
+      if (filtro) {
+        filtro.addEventListener(filtro.matches("select") ? "change" : "input", recargarConFiltros);
+      }
+      // Controles adicionales de búsqueda (por ejemplo, el nivel de triaje) recargan la lista.
+      document.querySelectorAll("[data-filtrar]").forEach(function (control) {
+        control.addEventListener("change", recargarConFiltros);
+      });
       await ui.ejecutar(formulario, cargar, true);
     });
   };

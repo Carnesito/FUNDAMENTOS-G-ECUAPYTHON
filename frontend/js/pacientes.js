@@ -6,7 +6,12 @@
     coleccion: "pacientes", formulario: "formPaciente", tabla: "tablaPacientes", columnas: 8,
     contador: "contadorPacientes", singular: "paciente", plural: "pacientes",
     campos: ["cedula", "nombres", "nacimiento", "telefono", "triaje", "motivo", "signos", "triaje_fecha"],
-    filtros: function () { return {q: document.getElementById("filtro").value.trim()}; },
+    filtros: function () {
+      return {
+        q: document.getElementById("filtro").value.trim(),
+        triaje: document.getElementById("filtroTriaje").value
+      };
+    },
     celdas: function (p) {
       var cama = p.cama ? ui.escapar(p.cama) :
         (p.camaHeredada ? '<span class="tag cama-heredada" title="Cama escrita como texto en el Sprint 1; todavía no está vinculada al catálogo de camas">' +

@@ -130,10 +130,20 @@
   <section class="card">
     <h2><span class="heading-title"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="15" height="17" rx="2"/><path d="M9 2v4m4-4v4M9 11h7m-7 5h7"/></svg>Pacientes registrados</span><span class="hint" id="contadorPacientes">0 pacientes</span></h2>
 
-    <div class="buscador">
+    <div class="buscador filtros-pacientes">
       <div class="campo">
         <label for="filtro">Buscar en la lista</label>
         <input id="filtro" type="search" placeholder="Cédula, nombres o teléfono" autocomplete="off">
+      </div>
+      <div class="campo">
+        <label for="filtroTriaje">Nivel de triaje</label>
+        <select id="filtroTriaje" data-filtrar>
+          <option value="">Todos los niveles</option>
+          <option>Nivel I</option>
+          <option>Nivel II</option>
+          <option>Nivel III</option>
+          <option>Nivel IV</option>
+        </select>
       </div>
     </div>
 
