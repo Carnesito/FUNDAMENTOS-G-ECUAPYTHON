@@ -35,7 +35,7 @@ exit /b 0
 
 :error
 echo.
-echo No se pudo iniciar. Revisa el mensaje anterior.
+echo No se pudo iniciar. Revisa el mensaje pasado.
 pause
 popd
 exit /b 1
