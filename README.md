@@ -2,7 +2,7 @@
 
 Aplicación de los Sprint 1 y 2 (pacientes, triaje, consulta, centros, áreas, habitaciones y camas)
 con frontend y backend separados. Permite crear, consultar, editar y eliminar registros, clasificar
-por gravedad y asignar camas disponibles. Los datos existentes de SQLite se conservan.
+por gravedad y asignar camas disponibles. Los datos existentes de SQLite se conservan....
 
 ## Arquitectura
 
